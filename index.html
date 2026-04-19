@@ -1601,5 +1601,59 @@ document.getElementById('day-h').addEventListener('keydown',e=>{if(e.key==='Ente
   }
 })();
 </script>
+  <script>
+// 🔥 LOCAL STORAGE
+function saveData(data) {
+  localStorage.setItem("appData", JSON.stringify(data));
+}
+
+function loadData() {
+  const data = localStorage.getItem("appData");
+  return data ? JSON.parse(data) : null;
+}
+
+// ═══════════════════════════════════════
+// АВТОЗБЕРЕЖЕННЯ
+// ═══════════════════════════════════════
+
+// Зберігаємо всі ключові дані
+function autoSave() {
+  const data = {
+    tasks,
+    folders,
+    notes,
+    todos
+  };
+  saveData(data);
+}
+
+// Завантажуємо при старті
+window.onload = () => {
+  const data = loadData();
+  if (data) {
+    tasks = data.tasks || [];
+    folders = data.folders || [];
+    notes = data.notes || {};
+    todos = data.todos || {};
+    
+    renderAll(); // оновлює інтерфейс
+  }
+};
+
+// Перехоплюємо всі зміни
+const originalAddTask = addTask;
+addTask = function() {
+  originalAddTask();
+  autoSave();
+};
+
+const originalAddBVTask = addBVTask;
+addBVTask = function() {
+  originalAddBVTask();
+  autoSave();
+};
+
+// Можеш додати ще функції якщо треба
+</script>
 </body>
 </html>
